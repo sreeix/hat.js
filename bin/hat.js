@@ -9,5 +9,4 @@ app
   .option('-v, --verbose', 'show lot of logs')
   .parse(process.argv);
   
-console.log(app.stage)
 hat.exec(app.args, {stage: app.stage, dryrun:app.dryrun});

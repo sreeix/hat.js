@@ -1,13 +1,12 @@
-modules.export =  {
-  name : "nodetoolbox",
-  repo: "git@github.com:sreeix/nodetoolbox2.git",
+module.exports = staging =   {
+  hosts : [{host: "192.168.2.44", user: "v", location:"~/apps/nodetoolbox"}],
+  repository: "git://github.com/sreeix/nodetoolbox2.git",
   branch: "master",
-  hosts : [{name: "ec2-50-16-23-51.compute-1.amazonaws.com", user: "ubuntu"}],
-  location: "apps/nodetoolbox",
-  pre-deploy : function setupfolders () {
-    console.log("setting up forlders");
+  deploymentType: "npm",
+  pre_deploy: function setupfolders (options) {
+    console.log("pre deploy");
   },
-  post-deploy: function cleanup () {
-    console.log("Post deploy");
+  post_deploy: function cleanup (options) {
+    console.log("Post deploy")
   }
 };
