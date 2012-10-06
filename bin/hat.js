@@ -9,4 +9,7 @@ app
   .option('-v, --verbose', 'show lot of logs')
   .parse(process.argv);
   
-hat.exec(app.args, {stage: app.stage, dryrun:app.dryrun});
+hat.exec(app.args, {stage: app.stage, dryrun: app.dryrun}, function(err, res){
+  console.log("finished");
+});
+
