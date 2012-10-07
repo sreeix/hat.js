@@ -3,7 +3,7 @@
 var app = require('commander');
 var hat = require('../lib/index.js');
 app
-  .version('0.0.1')
+  .version('0.0.3')
   .option('-s, --stage [stage]', 'deploy to  a specific stage [production]', 'production')
   .option('-n, --dryrun', 'Dry run the deployment')
   .option('-v, --verbose', 'show lot of logs')

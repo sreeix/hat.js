@@ -1,6 +1,6 @@
 {
   "name": "hat.js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "The Deployer",
   "main": "lib/index.js",
   "bin": {
