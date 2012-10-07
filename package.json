@@ -1,11 +1,14 @@
 {
   "name": "hat.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The Deployer",
   "main": "lib/index.js",
-  "bin": {
-    "hat": "./bin/hat.js"
-    },
+  "bin": { 
+    "hat": "./bin/hat.js", 
+    "hat.js": "./bin/hat.js",
+    "asshat": "./bin/asshat.js",
+    "asshat.js": "./bin/asshat.js"
+  },
   "scripts": {
     "console": "node",
     "test": "echo \"Error: no test specified\" && exit 1"
