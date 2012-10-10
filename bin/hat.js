@@ -18,11 +18,12 @@ app
   .option('-s, --stage [stage]', 'deploy to  a specific stage [production]', 'production')
   .option('-n, --dryrun', 'Dry run the deployment')
   .option('-t, --tasks', 'Show tasks available for execution.')
-  .option('-v, --verbose', 'show lot of logs')
+  .option('-v, --verbose', 'show lot of logs. The default')
   .parse(process.argv);
   if(app.tasks){
     process.exit(showTaskTips());
   }
+
 hat.exec(app.args, {stage: app.stage, dryrun: app.dryrun}, function(err, res){
   console.log("finished");
 });

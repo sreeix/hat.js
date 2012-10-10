@@ -10,8 +10,7 @@
     "asshat.js": "./bin/asshat.js"
   },
   "scripts": {
-    "console": "node",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "console": "node"
   },
   "repository": {
     "type": "git",

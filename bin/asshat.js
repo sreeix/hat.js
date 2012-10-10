@@ -12,7 +12,7 @@ app
   
 hat.exec(["rollback"], {stage: app.stage, dryrun: app.dryrun, revisions: app.revisions}, function(err, res){
   if(err){
-    console.log(err);
+    console.log(err.toString());
   }
   console.log("finished");
 });
