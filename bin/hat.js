@@ -8,7 +8,7 @@ var showTaskTips = function(){
   _.chain(hat)
    .functions()
    .filter(function filterPrivate (argument) { return argument[0] !== '_'})
-   .collect(function tips (item) {return {fun:item, tip: hat[item+"_tip"]}})
+   .collect(function tips (item) {return {fun: item, tip: hat[item+"_tip"]}})
    .compact()
    .each(function(item){console.log(item.fun + " : "+ item.tip )});
 }
