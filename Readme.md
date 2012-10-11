@@ -20,6 +20,7 @@ Usage
 ======
 
 * Include hat.js in your package.json.
+* npm install
 * Create a deploy folder in the root of the app.
 * Add the appropriate stage configuration files
 * `hat.js -s staging deploy`
@@ -47,7 +48,7 @@ Deployment Steps
 ==================
 On running deploy following happens
 
-* ***setup* Setup of the folders. The deployment structure follows cap structure of
+* **setup** Setup of the folders. The deployment structure follows cap structure of
   ** current (This is where the app will be running from)
   ** releases (All the releases deployed to the machine. current folder points to one of the release folders)
   ** shared (All the stuff common between releases. Stuff like pids/logs/caches/sockets)
