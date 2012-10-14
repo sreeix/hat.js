@@ -20,11 +20,11 @@ app
   .option('-t, --tasks', 'Show tasks available for execution.')
   .option('-v, --verbose', 'show lot of logs. The default')
   .parse(process.argv);
-  if(app.tasks){
+  if(app.tasks) {
     process.exit(showTaskTips());
   }
 
-hat.exec(app.args, {stage: app.stage, dryrun: app.dryrun}, function(err, res){
+hat.exec(app.args, {stage: app.stage, dryrun: app.dryrun, verbose: (app.verbose === true)}, function(err, res){
   console.log("finished");
 });
 
