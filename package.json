@@ -20,7 +20,7 @@
    "node-version": ">0.6.7",
   "dependencies": {
     "commander"       : "1.0.4",
-    "ssh-control"     : "0.1",
+    "ssh-control"     : "0.1.1",
     "async"           : "0.1.22",
     "underscore"      : "1.4.1"
   },
