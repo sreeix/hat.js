@@ -3,6 +3,7 @@ module.exports = staging =   {
   repository: "git://github.com/sreeix/nodetoolbox2.git",
   branch: "master",
   deploymentType: "npm",
+  defaultStage: 'staging'
   predeploy: function setupfolders (options) {
     console.log("pre deploy");
   },
