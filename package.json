@@ -1,6 +1,6 @@
 {
   "name": "hat.js",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "The Deployer",
   "main": "lib/index.js",
   "bin": { 
@@ -24,7 +24,6 @@
     "commander"       : "1.0.4",
     "ssh-control"     : "0.1.1",
     "async"           : "0.1.22",
-    "compress"        : "",
     "underscore"      : "1.4.1"
   },
   "devDependencies":{
