@@ -28,10 +28,13 @@ if(app.tasks) {
 }
 var defaultOptions = {stage: app.stage, dryrun: app.dryrun, verbose: (app.verbose === true)};
 if(app.generate) {
-  process.exit(gen(app.args, defaultOptions));
+  gen(app.args[0], defaultOptions, function  (err, res) {
+    process.exit(0);
+  });
+} else {
+  hat.exec(app.args, defaultOptions, function(err, res){
+    console.log("finished");
+  });
 }
 
-hat.exec(app.args, defaultOptions, function(err, res){
-  console.log("finished");
-});
 

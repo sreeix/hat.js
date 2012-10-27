@@ -12,4 +12,4 @@ var <%= name %> =   {
     this.cleanup(done);
   }
 };
-module.exports = <%= name%>;
+module.exports = <%= name %>;
