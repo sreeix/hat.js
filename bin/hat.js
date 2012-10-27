@@ -3,6 +3,7 @@
 var app = require('commander');
 var _ = require('underscore');
 var hat = require('../lib/index.js');
+var gen = require('../lib/generator.js');
 
 var showTaskTips = function(){
   _.chain(hat)
@@ -18,13 +19,19 @@ app
   .option('-s, --stage [stage]', 'deploy to  a specific stage [production]', 'production')
   .option('-n, --dryrun', 'Dry run the deployment')
   .option('-t, --tasks', 'Show tasks available for execution.')
+  .option('-g, --generate', 'Generate a default template for deployment')
   .option('-v, --verbose', 'show lot of logs. The default')
   .parse(process.argv);
-  if(app.tasks) {
-    process.exit(showTaskTips());
-  }
 
-hat.exec(app.args, {stage: app.stage, dryrun: app.dryrun, verbose: (app.verbose === true)}, function(err, res){
+if(app.tasks) {
+  process.exit(showTaskTips());
+}
+var defaultOptions = {stage: app.stage, dryrun: app.dryrun, verbose: (app.verbose === true)};
+if(app.generate) {
+  process.exit(gen(app.args, defaultOptions));
+}
+
+hat.exec(app.args, defaultOptions, function(err, res){
   console.log("finished");
 });
 
