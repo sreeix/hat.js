@@ -2,7 +2,7 @@ var <%= name %> =   {
   name: "<%= app_name%>",
   hosts : [{host: "host", user: "user", location:"~/apps/<%= app_name%>"}],
   repository: { type: "git", url: "<%= repository_url%>", branch: "master"},
-  deploymentType: "npm",
+  deploymentType: { npm : { env:{ NODE_ENV: "development"}}},
   predeploy: function setupfolders (done) {
     console.log("pre deploy");
     done();
