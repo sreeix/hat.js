@@ -27,6 +27,8 @@ Usage
 
 * `hat.js --help` : Prints all the options available
 * `hat.js --tasks` : Prints all the available tasks and some basic description.
+* `hat.js --generate staging` : Generates a simple but working deploy script for staging environment
+
 
 The standard format is hat.js <options> -s <stage> <function>
 
@@ -44,6 +46,14 @@ Following are provided by default.
   * _deploy_ : Deploys the code to production. Changes Symlink and restarts application
   * _rollback_ : Rolls back a deployment. By default only goes back 1 revision.
 
+Configuration
+=============
+
+A simple exported javascript file is used for configuration. Look at [deploy.js](https://github.com/sreeix/hat.js/blob/master/examples/deploy.js)
+or use the --generate option to create a new one.
+
+Here are the details on the [Config Options](https://github.com/sreeix/hat.js/wiki/Configuration)
+
 Deployment Steps
 ==================
 On running deploy following happens
@@ -55,8 +65,8 @@ On running deploy following happens
 * **checkout** Git clone the appropriate branch to the releases folder.
 * **changeSymlinks** Symlinks to current are switched to the new release.
 * **restart** App is restarted.If using npm module, npm stop; npm install; npm start is invoked in sequence.
-   
-  
+
+
 Extending the deploy scripting
 ==============================
 
