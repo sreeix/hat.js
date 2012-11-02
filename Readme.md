@@ -59,9 +59,9 @@ Deployment Steps
 On running deploy following happens
 
 * **setup** Setup of the folders. The deployment structure follows cap structure of
-  ** current (This is where the app will be running from)
-  ** releases (All the releases deployed to the machine. current folder points to one of the release folders)
-  ** shared (All the stuff common between releases. Stuff like pids/logs/caches/sockets)
+  * current (This is where the app will be running from)
+  * releases (All the releases deployed to the machine. current folder points to one of the release folders)
+  * shared (All the stuff common between releases. Stuff like pids/logs/caches/sockets)
 * **checkout** Git clone the appropriate branch to the releases folder.
 * **changeSymlinks** Symlinks to current are switched to the new release.
 * **restart** App is restarted.If using npm module, npm stop; npm install; npm start is invoked in sequence.
