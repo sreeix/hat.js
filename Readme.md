@@ -46,6 +46,12 @@ Following are provided by default.
   * _deploy_ : Deploys the code to production. Changes Symlink and restarts application
   * _rollback_ : Rolls back a deployment. By default only goes back 1 revision.
 
+In the wild
+===========
+The [Node Toolbox](http://nodetoolbox.com) uses hat.js to deploy, and the scripts are checked in [here](https://github.com/sreeix/nodetoolbox2/tree/master/deploy).
+
+Also check out the scripts section of Nodetoolbox's [package.json](https://github.com/sreeix/nodetoolbox2/blob/master/package.json) for deployment via commandline options.
+
 Configuration
 =============
 
