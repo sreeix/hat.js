@@ -1,80 +1,97 @@
 <!DOCTYPE html>
-<meta charset="utf-8">
-<style>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <style type="text/css">
 
 
-</style>
-<body>
-<script src="./d3.v3.js"></script>
-<script>
+.node circle {
+  cursor: pointer;
+  fill: #fff;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
 
-var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    width = 960 - margin.right - margin.left,
-    height = 800 - margin.top - margin.bottom;
-    
-var i = 0,
-    duration = 750,
-    root;
+.node text {
+  font-size: 11px;
+}
+
+path.link {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <h2>Deploy Graph for <%=taskName%></h2>
+    </div>
+    <script type="text/javascript">
+
+var m = [20, 120, 20, 120],
+    w = 1280 - m[1] - m[3],
+    h = 800 - m[0] - m[2],
+    i = 0,
+    root = <%=data%>
 
 var tree = d3.layout.tree()
-    .size([height, width]);
+    .size([h, w]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+var vis = d3.select("#body").append("svg:svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
+  .append("svg:g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-d3.json("./task_timings.json", function(error, flare) {
-  root = flare;
-  root.x0 = height / 2;
+  root.x0 = h / 2;
   root.y0 = 0;
 
-  function collapse(d) {
-    if (d.children) {
-      d._children = d.children;
-      d._children.forEach(collapse);
-      d.children = null;
+  function toggleAll(d) {
+    if (d.children && d.children.length > 0) {
+      d.children.forEach(toggleAll);
+      toggle(d);
     }
   }
 
-  root.children.forEach(collapse);
+  // Initialize the display to show a few nodes.
+  root.children.forEach(toggleAll);
   update(root);
-});
-
-d3.select(self.frameElement).style("height", "800px");
 
 function update(source) {
+  var duration = d3.event && d3.event.altKey ? 5000 : 500;
 
   // Compute the new tree layout.
-  var nodes = tree.nodes(root).reverse(),
-      links = tree.links(nodes);
+  var nodes = tree.nodes(root).reverse();
 
   // Normalize for fixed-depth.
   nodes.forEach(function(d) { d.y = d.depth * 180; });
 
   // Update the nodes…
-  var node = svg.selectAll("g.node")
+  var node = vis.selectAll("g.node")
       .data(nodes, function(d) { return d.id || (d.id = ++i); });
 
   // Enter any new nodes at the parent's previous position.
-  var nodeEnter = node.enter().append("g")
+  var nodeEnter = node.enter().append("svg:g")
       .attr("class", "node")
       .attr("transform", function(d) { return "translate(" + source.y0 + "," + source.x0 + ")"; })
-      .on("click", click);
+      .on("click", function(d) { toggle(d); update(d); });
 
-  nodeEnter.append("circle")
-      .attr("r", 1e-6)
+  nodeEnter.append("svg:circle")
+      .attr("r", function(d){ return d.totalTime / 1000})
       .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
-  nodeEnter.append("text")
+  nodeEnter.append("svg:text")
       .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
       .attr("dy", ".35em")
       .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-      .text(function(d) { return d.size ?  d.name + " {"+d.size +"}" : d.name ; })
+      .text(function(d) { return d.name; })
       .style("fill-opacity", 1e-6);
 
   // Transition nodes to their new position.
@@ -83,7 +100,7 @@ function update(source) {
       .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
   nodeUpdate.select("circle")
-      .attr("r", 4.5)
+      .attr("r", function(d){ return d.totalTime/ 1000})
       .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
   nodeUpdate.select("text")
@@ -102,16 +119,19 @@ function update(source) {
       .style("fill-opacity", 1e-6);
 
   // Update the links…
-  var link = svg.selectAll("path.link")
-      .data(links, function(d) { return d.target.id; });
+  var link = vis.selectAll("path.link")
+      .data(tree.links(nodes), function(d) { return d.target.id; });
 
   // Enter any new links at the parent's previous position.
-  link.enter().insert("path", "g")
+  link.enter().insert("svg:path", "g")
       .attr("class", "link")
       .attr("d", function(d) {
         var o = {x: source.x0, y: source.y0};
         return diagonal({source: o, target: o});
-      });
+      })
+    .transition()
+      .duration(duration)
+      .attr("d", diagonal);
 
   // Transition links to their new position.
   link.transition()
@@ -134,16 +154,17 @@ function update(source) {
   });
 }
 
-// Toggle children on click.
-function click(d) {
-  if (d.children) {
+// Toggle children.
+function toggle(d) {
+  if (d.children && d.children.length > 0) {
     d._children = d.children;
     d.children = null;
   } else {
     d.children = d._children;
     d._children = null;
   }
-  update(d);
 }
 
-</script>
+    </script>
+  </body>
+</html>
