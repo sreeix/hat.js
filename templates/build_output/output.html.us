@@ -4,6 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
     <link type="text/css" rel="stylesheet" href="style.css"/>
     <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http:////cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
     <style type="text/css">
 
 
@@ -28,27 +29,32 @@ path.link {
   </head>
   <body>
     <div id="body">
-      <h2>Deploy Graph for <%=taskName%></h2>
+      <h2> <h2>Deploy Graph for <%=taskName%></h2></h2>
     </div>
     <script type="text/javascript">
 
 var m = [20, 120, 20, 120],
     w = 1280 - m[1] - m[3],
     h = 800 - m[0] - m[2],
-    i = 0,
-    root = <%=data%>
+    i = 0;
+var root = <%=data%>,
+    flattened = [];
 
-var tree = d3.layout.tree()
-    .size([h, w]);
+var addToList = function foo (node) {
+  flattened.push(node);
+  _.each(node.children||[], foo);
+}(root);
 
-var diagonal = d3.svg.diagonal()
-    .projection(function(d) { return [d.y, d.x]; });
+var radiusScale = d3.scale.linear().range([10, 100]).domain(d3.extent(flattened, function(d){return d.totalTime}));
+var tree = d3.layout.tree().size([h, w]);
+
+var diagonal = d3.svg.diagonal().projection(function(d) { return [d.y, d.x]; });
 
 var vis = d3.select("#body").append("svg:svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
-  .append("svg:g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    .append("svg:g")
+      .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
   root.x0 = h / 2;
   root.y0 = 0;
@@ -60,8 +66,8 @@ var vis = d3.select("#body").append("svg:svg")
     }
   }
 
-  // Initialize the display to show a few nodes.
-  root.children.forEach(toggleAll);
+  // // Initialize the display to show a few nodes.
+  // root.children.forEach(toggleAll);
   update(root);
 
 function update(source) {
@@ -84,14 +90,14 @@ function update(source) {
       .on("click", function(d) { toggle(d); update(d); });
 
   nodeEnter.append("svg:circle")
-      .attr("r", function(d){ return d.totalTime / 1000})
+      .attr("r", function(d){ return radiusScale(d.totalTime);})
       .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
   nodeEnter.append("svg:text")
       .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
       .attr("dy", ".35em")
       .attr("text-anchor", function(d) { return d.children || d._children ? "end" : "start"; })
-      .text(function(d) { return d.name; })
+      .text(function(d) { return d.name+ "("+d.totalTime/10000 + "sec.)"; })
       .style("fill-opacity", 1e-6);
 
   // Transition nodes to their new position.
@@ -100,7 +106,7 @@ function update(source) {
       .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
   nodeUpdate.select("circle")
-      .attr("r", function(d){ return d.totalTime/ 1000})
+      .attr("r", function(d){ return radiusScale(d.totalTime);})
       .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
 
   nodeUpdate.select("text")
