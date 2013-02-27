@@ -32,6 +32,17 @@ if(app.generate) {
     process.exit(0);
   });
 } else {
+  process.on('SIGINT',function () {
+    console.log("Interruped, Rolling back");
+    hat.rollback(function (err, res) {
+      if(err) {
+        console.log("rollback Failed "+ err);  
+      } else{
+        console.log("rollback Complete");
+      }
+      process.exit(1);
+    });
+  });
   hat.exec(app.args, defaultOptions, function(err, res){
     console.log("finished");
   });
