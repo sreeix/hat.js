@@ -29,8 +29,10 @@ path.link {
   </head>
   <body>
     <div id="body">
-      <h2> <h2>Deploy Graph for <%=taskName%></h2></h2>
+      <h2>Deploy Graph for <%=taskName%></h2>
+      Click to expand and close. The size of is related to how long the task took.
     </div>
+    <a href ='./control.log'> Console Log</a>
     <script type="text/javascript">
 
 var m = [20, 120, 20, 120],
