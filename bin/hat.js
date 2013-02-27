@@ -28,7 +28,7 @@ if(app.tasks) {
 }
 var defaultOptions = {stage: app.stage, dryrun: app.dryrun, verbose: (app.verbose === true)};
 if(app.generate) {
-  gen(app.args[0], defaultOptions, function  (err, res) {
+  gen.template(app.args[0], defaultOptions, function  (err, res) {
     process.exit(0);
   });
 } else {
