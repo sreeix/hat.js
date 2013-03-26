@@ -45,7 +45,7 @@ if(app.generate) {
     });
   });
   hat.exec(app.args, defaultOptions, function(err, res){
-    logger.log("finished");
+    logger.info("finished");
   });
 }
 
