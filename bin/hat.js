@@ -2,8 +2,8 @@
 
 var app = require('commander');
 var _ = require('underscore');
-var hat = require('../lib/index.js');
-var gen = require('../lib/generator.js');
+var hat = require('../lib/index');
+var gen = require('../lib/generator');
 
 var showTaskTips = function(){
   _.chain(hat)
@@ -26,25 +26,26 @@ app
 if(app.tasks) {
   process.exit(showTaskTips());
 }
-var defaultOptions = {stage: app.stage, dryrun: app.dryrun, verbose: (app.verbose === true)};
+var logger = require('../lib/logger')((app.verbose === true) ? "silly": 'error');
+var defaultOptions = {stage: app.stage, dryrun: app.dryrun, logger: logger};
 if(app.generate) {
   gen.template(app.args[0], defaultOptions, function  (err, res) {
     process.exit(0);
   });
 } else {
   process.on('SIGINT',function () {
-    console.log("Interruped, Rolling back");
+    logger.warn("Interruped, Rolling back");
     hat.rollback(function (err, res) {
       if(err) {
-        console.log("rollback Failed "+ err);  
+        logger.error("Rollback Failed "+ err);
       } else{
-        console.log("rollback Complete");
+        logger.info("Rollback Complete");
       }
       process.exit(1);
     });
   });
   hat.exec(app.args, defaultOptions, function(err, res){
-    console.log("finished");
+    logger.log("finished");
   });
 }
 

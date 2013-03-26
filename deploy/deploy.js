@@ -4,11 +4,11 @@ var  =   {
   repository: { type: "git", url: "giturl", branch: "master"},
   deploymentType: "npm",
   predeploy: function setupfolders (done) {
-    console.log("pre deploy");
+    this.logger.info("pre deploy");
     done();
   },
   postdeploy: function cleanup (done) {
-    console.log("Post deploy")
+    this.logger.info("Post deploy")
     this.cleanup(done);
   }
 };

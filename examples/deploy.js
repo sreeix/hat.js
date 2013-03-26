@@ -5,9 +5,9 @@ module.exports = staging =   {
   deploymentType: "npm",
   defaultStage: 'staging'
   predeploy: function setupfolders (options) {
-    console.log("pre deploy");
+    this.logger.info("pre deploy");
   },
   postdeploy: function cleanup (options) {
-    console.log("Post deploy")
+    this.logger.info("Post deploy")
   }
 };
