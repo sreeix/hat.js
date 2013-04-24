@@ -1,7 +1,7 @@
 Hat.js
 ========
 
-Deployment for Node js. It simplifies the deployment to production servers. 
+Deployment for Node js. It simplifies the deployment to production servers.
 The Javascript Hat for the Ruby's Cap.
 
 
@@ -22,7 +22,7 @@ Usage
 * Include hat.js in your package.json.
 * npm install
 * Create a deploy folder in the root of the app.
-* Add the appropriate stage configuration files
+* Add the appropriate stage configuration files( or generate it via `hat.js --generate staging`)
 * `hat.js -s staging deploy`
 
 * `hat.js --help` : Prints all the options available
@@ -31,6 +31,8 @@ Usage
 
 
 The standard format is hat.js <options> -s <stage> <function>
+All tasks generate an output.html for tracking execution times. It looks something like this
+
 
 
   `asshat.js <options> <stage> `
@@ -38,9 +40,9 @@ This command will just rollback a release.
 
 Standard Tasks
 --------------------
-  
+
 Following are provided by default.
-  
+
   * _setup_ : sets up the basic deployment environment. This should be done before complete deploy
   * _cleanup_ : cleans up old releases from the hosts. Defaults to keep only 5 releases
   * _deploy_ : Deploys the code to production. Changes Symlink and restarts application
@@ -93,7 +95,6 @@ Limitations
 
 * Currently only supported repository type is **git**
 * Currently only supported deployment type is npm.
-* Deployment does not happen in a transaction, ie. rollback will not be called for failed deployments
 * Half assed api for plugin Authors. I am actively looking to improve this.
 * Lots of missing options (like set deploy optimization for checkouts/ deploying via scp on remote macines)
 
