@@ -2,9 +2,8 @@ language: node_js
 node_js:
   - 0.6
   - 0.8
-  - 0.10
 
 notifications:
   email:
-    - sreeix@activesphere.com
+    - gabbar@activesphere.com
   irc: "irc.foonetic.org#activesphere"

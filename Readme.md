@@ -1,4 +1,4 @@
-Hat.js
+Hat.js [![Build Status](https://secure.travis-ci.org/sreeix/hat.js.png?branch=master)](http://travis-ci.org/sreeix/hat.js)
 ========
 
 Deployment for Node js. It simplifies the deployment to production servers.
