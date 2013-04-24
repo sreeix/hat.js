@@ -12,7 +12,18 @@ var showTaskTips = function(){
    .collect(function tips (item) {return {fun: item, tip: hat[item+"_tip"]}})
    .compact()
    .each(function(item){console.log(item.fun + " : "+ item.tip )});
-}
+};
+var selfAbort = function () {
+  logger.warn("Interruped, Rolling back");
+  hat.rollback(function (err, res) {
+    if(err) {
+      logger.error("Rollback Failed "+ err);
+    } else{
+      logger.info("Rollback Complete");
+    }
+    process.exit(1);
+  });
+};
 
 app
   .version('0.0.3')
@@ -28,22 +39,14 @@ if(app.tasks) {
 }
 var logger = require('../lib/logger')((app.verbose === true) ? "silly": 'error');
 var defaultOptions = {stage: app.stage, dryrun: app.dryrun, logger: logger};
+
 if(app.generate) {
   gen.template(app.args[0], defaultOptions, function  (err, res) {
     process.exit(0);
   });
 } else {
-  process.on('SIGINT',function () {
-    logger.warn("Interruped, Rolling back");
-    hat.rollback(function (err, res) {
-      if(err) {
-        logger.error("Rollback Failed "+ err);
-      } else{
-        logger.info("Rollback Complete");
-      }
-      process.exit(1);
-    });
-  });
+  process.on('SIGINT', selfAbort);
+  // process.on('uncaughtException', selfAbort);
   hat.exec(app.args, defaultOptions, function(err, res){
     logger.info("finished");
   });
