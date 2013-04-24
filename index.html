@@ -1,0 +1,144 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Hat.js by sreeix</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/sreeix/hat.js">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/sreeix/hat.js/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/sreeix/hat.js/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Hat.js</h1>
+          <p>Node.js deployment tool. All your scripts are Javascript.</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/sreeix">sreeix</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="http://twitter.com/#!/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h1>Hat.js</h1>
+
+<p>Deployment for Node js. It simplifies the deployment to production servers. 
+The Javascript Hat for the Ruby's Cap.</p>
+
+<h1>What does it do?</h1>
+
+<p>It uses ssh to allow execution of simple shell scripts on remote servers when deploying your node.js process.</p>
+
+<p>The framework is extremely simple and reads from a deploy folder in the root of your application. You can add multiple files there each file becomes a stage. eg. staging.js for staging environment and production.js for production environment.</p>
+
+<p>There is no DSL or language to describe your deployment. The frameworks consists of a simple JS deployment information file like in the <a href="https://github.com/sreeix/hat.js/blob/master/examples/deploy.js">example folder</a>.</p>
+
+<h1>Usage</h1>
+
+<ul>
+<li>Include hat.js in your package.json.</li>
+<li>npm install</li>
+<li>Create a deploy folder in the root of the app.</li>
+<li>Add the appropriate stage configuration files</li>
+<li><p><code>hat.js -s staging deploy</code></p></li>
+<li><p><code>hat.js --help</code> : Prints all the options available</p></li>
+<li><p><code>hat.js --tasks</code> : Prints all the available tasks and some basic description.</p></li>
+<li><p><code>hat.js --generate staging</code> : Generates a simple but working deploy script for staging environment</p></li>
+</ul><p>The standard format is hat.js  -s </p>
+
+<p><code>asshat.js &lt;options&gt; &lt;stage&gt;</code>
+This command will just rollback a release.</p>
+
+<h2>Standard Tasks</h2>
+
+<p>Following are provided by default.</p>
+
+<ul>
+<li>
+<em>setup</em> : sets up the basic deployment environment. This should be done before complete deploy</li>
+<li>
+<em>cleanup</em> : cleans up old releases from the hosts. Defaults to keep only 5 releases</li>
+<li>
+<em>deploy</em> : Deploys the code to production. Changes Symlink and restarts application</li>
+<li>
+<em>rollback</em> : Rolls back a deployment. By default only goes back 1 revision.</li>
+</ul><h1>In the wild</h1>
+
+<p>The <a href="http://nodetoolbox.com">Node Toolbox</a> uses hat.js to deploy, and the scripts are checked in <a href="https://github.com/sreeix/nodetoolbox2/tree/master/deploy">here</a>.</p>
+
+<p>Also check out the scripts section of Nodetoolbox's <a href="https://github.com/sreeix/nodetoolbox2/blob/master/package.json">package.json</a> for deployment via commandline options.</p>
+
+<h1>Configuration</h1>
+
+<p>A simple exported javascript file is used for configuration. Look at <a href="https://github.com/sreeix/hat.js/blob/master/examples/deploy.js">deploy.js</a>
+or use the --generate option to create a new one.</p>
+
+<p>Here are the details on the <a href="https://github.com/sreeix/hat.js/wiki/Configuration">Config Options</a></p>
+
+<h1>Deployment Steps</h1>
+
+<p>On running deploy following happens</p>
+
+<ul>
+<li>
+<strong>setup</strong> Setup of the folders. The deployment structure follows cap structure of
+
+<ul>
+<li>current (This is where the app will be running from)</li>
+<li>releases (All the releases deployed to the machine. current folder points to one of the release folders)</li>
+<li>shared (All the stuff common between releases. Stuff like pids/logs/caches/sockets)</li>
+</ul>
+</li>
+<li>
+<strong>checkout</strong> Git clone the appropriate branch to the releases folder.</li>
+<li>
+<strong>changeSymlinks</strong> Symlinks to current are switched to the new release.</li>
+<li>
+<strong>restart</strong> App is restarted.If using npm module, npm stop; npm install; npm start is invoked in sequence.</li>
+</ul><h1>Extending the deploy scripting</h1>
+
+<p>All tasks have a pre/post script. eg. if a <em>predeploy</em> function exists in the deployscript then it will be executed before the execution of deploy task. Similarly if <em>postdeploy</em> function exists  then it will be invoked after deploy step is successful.</p>
+
+<p>By implementing the default functions (restart/deploy/cleanup/changeSymlinks) you could do your own thing and not rely on any of the internal things. This is being done in <a href="https://github.com/sreeix/hat.js/blob/master/lib/npm.js">npm.js</a>.</p>
+
+<p>The plugins are called in the context of the main app so most internal methods are available for plugins to call eg.</p>
+
+<ul>
+<li>_ssh : Executes command(s) on a host</li>
+<li>hosts : function to execute stuff on each machine.</li>
+<li>_serial: execute bunch of methods serially.</li>
+</ul><h1>Limitations</h1>
+
+<ul>
+<li>Currently only supported repository type is <strong>git</strong>
+</li>
+<li>Currently only supported deployment type is npm.</li>
+<li>Deployment does not happen in a transaction, ie. rollback will not be called for failed deployments</li>
+<li>Half assed api for plugin Authors. I am actively looking to improve this.</li>
+<li>Lots of missing options (like set deploy optimization for checkouts/ deploying via scp on remote macines)</li>
+</ul>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
