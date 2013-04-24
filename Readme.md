@@ -33,6 +33,8 @@ Usage
 The standard format is hat.js <options> -s <stage> <function>
 All tasks generate an output.html for tracking execution times. It looks something like this
 
+![Output File!](http://github.com/sreeix/hat.js/raw/master/images/deploygraph.png)
+
 
 
   `asshat.js <options> <stage> `
